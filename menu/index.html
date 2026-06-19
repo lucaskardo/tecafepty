@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Té Café · Menú</title>
+  <meta name="description" content="Menú de Té Café — de nuestra huerta a tu mesa. Desayuno, lunch, café de origen, bebidas frías y especiales.">
+  <meta name="theme-color" content="#F6F1E5">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --paper:#F6F1E5;
+      --ink:#283328;
+      --ink-soft:#5A6857;
+      --leaf:#5E7C44;
+      --price:#956320;
+      --line:rgba(40,51,40,.10);
+      --sage:#E9EEDD;
+      --max:600px;
+      --serif:"Fraunces",Georgia,serif;
+      --sans:"DM Sans",system-ui,-apple-system,sans-serif;
+      --ease:cubic-bezier(.2,.7,.3,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    a{color:inherit;text-decoration:none}
+
+    /* paper grain */
+    .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+    /* botanical line art */
+    .botanical{color:var(--leaf);display:block}
+    .botanical path,.botanical circle{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;
+      stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.25s var(--ease)}
+    .botanical.drawn path,.botanical.drawn circle{stroke-dashoffset:0}
+    .botanical *:nth-child(1){transition-delay:0s}.botanical *:nth-child(2){transition-delay:.05s}
+    .botanical *:nth-child(3){transition-delay:.1s}.botanical *:nth-child(4){transition-delay:.15s}
+    .botanical *:nth-child(5){transition-delay:.2s}.botanical *:nth-child(6){transition-delay:.25s}
+    .botanical *:nth-child(7){transition-delay:.3s}.botanical *:nth-child(8){transition-delay:.35s}
+    .botanical *:nth-child(9){transition-delay:.4s}.botanical *:nth-child(10){transition-delay:.45s}
+    .botanical *:nth-child(11){transition-delay:.5s}.botanical *:nth-child(12){transition-delay:.55s}
+    .botanical *:nth-child(13){transition-delay:.6s}.botanical *:nth-child(14){transition-delay:.65s}
+    .botanical *:nth-child(15){transition-delay:.7s}.botanical *:nth-child(16){transition-delay:.75s}
+    .botanical *:nth-child(17){transition-delay:.8s}.botanical *:nth-child(18){transition-delay:.85s}
+    .botanical *:nth-child(n+19){transition-delay:.9s}
+    .leafsm{width:16px;height:16px;color:var(--leaf);flex:0 0 auto}
+    .leafsm path{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+    /* reveal */
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+    .reveal.in{opacity:1;transform:none}
+
+    /* sticky nav */
+    .top{position:sticky;top:0;z-index:10;background:rgba(246,241,229,.9);
+      -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);padding:calc(.55rem + env(safe-area-inset-top)) 0 .45rem}
+    nav.cats{display:flex;gap:.1rem;justify-content:center;overflow-x:auto;scrollbar-width:none;padding:0 .9rem}
+    nav.cats::-webkit-scrollbar{display:none}
+    nav.cats a{position:relative;flex:0 0 auto;padding:.4rem .8rem .5rem;font-size:.8rem;font-weight:500;color:var(--ink-soft);white-space:nowrap;transition:color .25s}
+    nav.cats a::after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:.18rem;height:1.5px;background:var(--leaf);border-radius:2px;transform:scaleX(0);transition:transform .28s var(--ease)}
+    nav.cats a:hover,nav.cats a.active{color:var(--leaf)}
+    nav.cats a:hover::after,nav.cats a.active::after{transform:scaleX(1)}
+
+    main{max-width:var(--max);margin:0 auto;padding:0 1.25rem 3rem}
+
+    /* cover */
+    .cover{text-align:center;padding:2.6rem 0 1.6rem}
+    .cover .botanical{width:104px;height:104px;margin:0 auto .6rem}
+    .wordmark{font-family:var(--serif);font-weight:500;font-size:clamp(2.8rem,15vw,4rem);line-height:.92;letter-spacing:-.02em}
+    .est{font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-soft);margin-top:.7rem}
+    .tagline{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(1.1rem,4.6vw,1.4rem);color:var(--leaf);margin-top:.9rem}
+    .rule{display:flex;align-items:center;justify-content:center;gap:.8rem;margin:1.4rem auto 0;max-width:13rem}
+    .rule::before,.rule::after{content:"";flex:1;height:1px;background:var(--line)}
+
+    /* section */
+    .sec{padding-top:2.9rem;scroll-margin-top:74px}
+    .sec-head{text-align:center;margin-bottom:1.4rem}
+    .sec-head .botanical{width:60px;height:60px;margin:0 auto .35rem}
+    .sec-head h2{font-family:var(--serif);font-weight:500;font-size:clamp(2rem,8vw,2.8rem);line-height:1.02}
+
+    /* subsection */
+    .sub{margin-top:2rem}
+    .sub-head{display:flex;align-items:center;gap:.55rem;margin-bottom:.7rem}
+    .sub-head h3{font-family:var(--serif);font-weight:500;font-size:1.22rem;color:var(--leaf);line-height:1;white-space:nowrap}
+    .sub-head::after{content:"";flex:1;height:1px;background:var(--line)}
+
+    /* items */
+    .item{padding:.9rem 0}
+    .item + .item{border-top:1px solid var(--line)}
+    .head{display:flex;justify-content:space-between;align-items:baseline;gap:1.1rem}
+    .name{font-weight:600;font-size:1rem;line-height:1.25}
+    .price{font-family:var(--serif);font-weight:500;color:var(--price);white-space:nowrap;font-variant-numeric:tabular-nums;font-size:1.02rem}
+    .desc{margin-top:.3rem;color:var(--ink-soft);font-size:.9rem;line-height:1.5;max-width:42rem}
+    .tag{display:inline-block;margin-top:.4rem;font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--leaf);font-weight:600}
+    .also{margin-top:.42rem;font-size:.86rem;color:var(--ink-soft)}
+    .also b{color:var(--price);font-weight:500;font-family:var(--serif)}
+
+    /* extras two-col */
+    .cols{display:grid;grid-template-columns:1fr;gap:0}
+    .plist .item{padding:.5rem 0}
+    .plist .name{font-weight:500;font-size:.94rem}
+
+    /* origin */
+    .origin{margin-top:.5rem}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:.1rem .9rem;margin:.4rem 0 .5rem;font-size:.8rem;color:var(--ink-soft)}
+    .meta b{color:var(--leaf);font-weight:600}
+    .cup{font-family:var(--serif);font-style:italic;font-size:.92rem;line-height:1.45;color:var(--ink)}
+    .aside{margin-top:.9rem;font-family:var(--serif);font-style:italic;font-size:.92rem;line-height:1.5;color:var(--ink-soft)}
+    .footnote{margin-top:.45rem;font-size:.8rem;color:var(--ink-soft)}
+    .veg-note{margin-top:1rem;text-align:center;font-size:.85rem;color:var(--leaf);font-style:italic;font-family:var(--serif)}
+
+    /* specials */
+    .special{background:var(--sage);border-radius:18px;padding:1.3rem 1.1rem;margin-top:1.1rem}
+    .special h3{font-family:var(--serif);font-weight:500;font-size:1.6rem;text-align:center;line-height:1.05}
+    .special h3 .p{color:var(--price)}
+    .s-sub{text-align:center;color:var(--ink-soft);font-size:.86rem;margin:.45rem auto 1.1rem;max-width:30rem;line-height:1.42}
+    .choices{display:grid;grid-template-columns:1fr;gap:1.1rem}
+    .choice h4{font-family:var(--sans);font-weight:600;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--leaf);text-align:center;margin-bottom:.45rem}
+    .choice ul{list-style:none;text-align:center;color:var(--ink);font-size:.92rem;line-height:1.7}
+    .promo{margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--line);text-align:center;color:var(--leaf);font-size:.82rem;font-weight:600;line-height:1.4}
+
+    footer{text-align:center;padding:3rem 1rem calc(2rem + env(safe-area-inset-bottom));margin-top:2.6rem;border-top:1px solid var(--line);color:var(--ink-soft)}
+    footer .botanical{width:48px;height:48px;margin:0 auto .7rem}
+    footer .fw{font-family:var(--serif);font-size:1.4rem;color:var(--ink)}
+    footer .fs{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;margin-top:.35rem}
+
+    @media (min-width:560px){
+      .choices{grid-template-columns:repeat(3,1fr)}
+      .cols{grid-template-columns:1fr 1fr;gap:0 1.8rem}
+    }
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .reveal{opacity:1;transform:none;transition:none}
+      .botanical path,.botanical circle{stroke-dashoffset:0;transition:none}
+      nav.cats a::after{transition:none}
+    }
+  </style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="top">
+  <nav class="cats" aria-label="Categorías">
+    <a href="#breakfast">Breakfast</a>
+    <a href="#lunch">Lunch</a>
+    <a href="#coffee">Café</a>
+    <a href="#drinks">Bebidas Frías</a>
+    <a href="#specials">Specials</a>
+  </nav>
+</header>
+
+<main>
+  <!-- COVER -->
+  <section class="cover reveal">
+    <svg class="botanical" viewBox="0 0 140 140" aria-hidden="true">
+      <path pathLength="1" d="M70 132 C66 102 66 70 86 20"/>
+      <path pathLength="1" d="M86 20 q5 -3 7 1 q1 3 -3 4"/>
+      <path pathLength="1" d="M69 120 Q58 113 52 110"/><path pathLength="1" d="M69 120 Q80 113 86 110"/>
+      <path pathLength="1" d="M68 108 Q57 101 51 98"/><path pathLength="1" d="M68 108 Q79 101 85 98"/>
+      <path pathLength="1" d="M68 96 Q58 89 52 86"/><path pathLength="1" d="M68 96 Q79 89 85 86"/>
+      <path pathLength="1" d="M69 84 Q60 77 54 74"/><path pathLength="1" d="M69 84 Q79 77 85 74"/>
+      <path pathLength="1" d="M70 72 Q62 65 56 62"/><path pathLength="1" d="M70 72 Q80 65 86 62"/>
+      <path pathLength="1" d="M72 60 Q65 53 60 50"/><path pathLength="1" d="M72 60 Q81 54 86 51"/>
+      <path pathLength="1" d="M75 48 Q69 42 64 39"/><path pathLength="1" d="M75 48 Q83 43 87 41"/>
+      <path pathLength="1" d="M78 37 Q73 32 69 29"/><path pathLength="1" d="M78 37 Q84 33 88 31"/>
+    </svg>
+    <h1 class="wordmark">Té Café</h1>
+    <div class="est">Est. 2012 · Panamá</div>
+    <p class="tagline">De nuestra huerta a tu mesa</p>
+    <div class="rule"><svg class="leafsm"><use href="#leafsm"/></svg></div>
+  </section>
+
+  <!-- BREAKFAST -->
+  <section class="sec" id="breakfast">
+    <div class="sec-head reveal">
+      <svg class="botanical" viewBox="0 0 100 100" aria-hidden="true">
+        <path pathLength="1" d="M50 92 V20"/>
+        <path pathLength="1" d="M50 70 C39 68 31 60 28 49 C40 50 48 58 50 68"/>
+        <path pathLength="1" d="M50 60 C61 58 69 50 72 39 C60 40 52 48 50 58"/>
+        <path pathLength="1" d="M50 52 C41 50 34 43 32 33 C42 34 49 41 50 50"/>
+        <path pathLength="1" d="M50 44 C59 42 66 35 68 26 C58 27 51 34 50 42"/>
+        <path pathLength="1" d="M50 36 C45 31 43 25 43 18 C49 21 51 27 50 34"/>
+      </svg>
+      <h2>Breakfast</h2>
+    </div>
+    <div class="reveal">
+      <article class="item"><div class="head"><span class="name">Omelette de Patio</span><span class="price">$14</span></div>
+        <p class="desc">Escoge 1: bacon, jamón, pavo o salmón ahumado.</p>
+        <p class="desc">Escoge 2: cebolla, pimentón, tomatitos cherry, hongos, aguacate, mozzarella, suizo, cheddar, havarti, parmesano, queso crema, mesclun, rabanito microgreens, albahaca, baby arúgula o sunflower microgreens.</p></article>
+      <article class="item"><div class="head"><span class="name">Omelette Té Café</span><span class="price">$12</span></div>
+        <p class="desc">Relleno con hongos portobello, cebolla caramelizada y queso mozzarella. Una combinación simplemente espectacular.</p></article>
+      <article class="item"><div class="head"><span class="name">Huevos Estrellados</span><span class="price">$12</span></div>
+        <p class="desc">Cama de papas fritas bañadas en salsa de queso cheddar, coronadas con bacon crujiente y huevos fritos de yema suave, terminados con un toque de queso trufado.</p></article>
+      <article class="item"><div class="head"><span class="name">Masa Hojaldre</span><span class="price">$16</span></div>
+        <p class="desc">Base de hojaldre crujiente, mesclun, carne Angus en finas láminas, mozzarella, hongos salteados, cebolla caramelizada y dos huevos fritos. Terminada con sunflower microgreens y nuestra deliciosa salsa criolla.</p></article>
+      <article class="item"><div class="head"><span class="name">Egg Sandwich</span><span class="price">$12</span></div>
+        <p class="desc">Croissant, huevos al gusto, queso cheddar, tocino y aguacate.</p></article>
+      <article class="item"><div class="head"><span class="name">Croissant Dulce</span><span class="price">$8</span></div>
+        <p class="desc">Escoge 1: Nutella, crema de pistacho, dulce de leche, mantequilla de almendra (sin azúcar) o crema whipped de la casa.</p></article>
+      <article class="item"><div class="head"><span class="name">Tostadas Francesas</span><span class="price">$12</span></div>
+        <p class="desc">Pan de molde brioche artesanal, crema whipped de la casa, fresas, blueberries y sirope.</p></article>
+      <article class="item"><div class="head"><span class="name">Avocado Toast</span><span class="price">$12</span></div>
+        <p class="desc">Pan hogaza masa madre, aguacate, tomates secos, queso feta, aderezo balsámico y microgreens.</p></article>
+      <article class="item"><div class="head"><span class="name">Pancakes Clásicos</span><span class="price">$10</span></div>
+        <p class="desc">Suavecitos y deliciosos, servidos con crema whipped de la casa, fresas, blueberries y sirope.</p>
+        <p class="also">También: blueberries <b>$12</b> · chocolate chips <b>$12</b> · rellenos de Nutella <b>$13</b></p></article>
+      <article class="item"><div class="head"><span class="name">Eggs Benedict</span><span class="price">$13</span></div>
+        <p class="desc">Sobre English muffin, salsa holandesa, proteína de preferencia (pavo, tocino, salmón o jamón), huevos pochados, mézclum y tomate cherry.</p>
+        <span class="tag">Solo sábados y domingos</span></article>
+    </div>
+  </section>
+
+  <!-- LUNCH -->
+  <section class="sec" id="lunch">
+    <div class="sec-head reveal">
+      <svg class="botanical" viewBox="0 0 100 100" aria-hidden="true">
+        <path pathLength="1" d="M50 92 V20"/>
+        <path pathLength="1" d="M50 62 L37 54"/><path pathLength="1" d="M50 62 L63 54"/>
+        <path pathLength="1" d="M50 53 L38 46"/><path pathLength="1" d="M50 53 L62 46"/>
+        <path pathLength="1" d="M50 44 L40 38"/><path pathLength="1" d="M50 44 L60 38"/>
+        <path pathLength="1" d="M50 36 L42 31"/><path pathLength="1" d="M50 36 L58 31"/>
+        <path pathLength="1" d="M50 29 L44 25"/><path pathLength="1" d="M50 29 L56 25"/>
+      </svg>
+      <h2>Lunch</h2>
+    </div>
+
+    <div class="sub reveal"><div class="sub-head"><svg class="leafsm"><use href="#leafsm"/></svg><h3>Entradas</h3></div>
+      <div>
+        <article class="item"><div class="head"><span class="name">Boneless Chicken Bites</span><span class="price">$12</span></div>
+          <p class="desc">Tiernos por dentro, crujientes por fuera. Con nuestras tres salsas caseras: bourbon BBQ, honey mustard y buffalo. El balance perfecto entre textura, sabor y antojo.</p></article>
+        <article class="item"><div class="head"><span class="name">Dip de Hummus de Edamame</span><span class="price">$12</span></div>
+          <p class="desc">Suave, fresco y con un twist: edamame, tahini, limón y un toque de ajo. Con nuestras tostaditas crujientes hechas en casa.</p></article>
+        <article class="item"><div class="head"><span class="name">Carpaccio Té Café</span><span class="price">$16</span></div>
+          <p class="desc">Un clásico con el twist Té Café: láminas de filete de res con reducción de balsámico de café, aioli trufado, lascas de parmesano, pistacho molido y un toque fresco de baby arúgula. Con tostaditas de la casa.</p></article>
+        <article class="item"><div class="head"><span class="name">Empanaditas Fritas</span><span class="price">$10</span></div>
+          <p class="desc">Masa crujiente estilo hojaldre, rellenas a tu gusto: queso, pollo, carne o combinación. Con chutney de mango y salsa criolla, ambas hechas en casa.</p></article>
+        <article class="item"><div class="head"><span class="name">Deditos de Hongo Portobello</span><span class="price">$10</span></div>
+          <p class="desc">Bastones de hongo portobello tempurizados, con alioli.</p></article>
+        <article class="item"><div class="head"><span class="name">Dip de Alcachofa</span><span class="price">$10</span></div>
+          <p class="desc">Corazones de alcachofa, queso Philadelphia, mozzarella y nuestro toque secreto. Con tostaditas crujientes hechas en casa.</p></article>
+      </div>
+    </div>
+
+    <div class="sub reveal"><div class="sub-head"><svg class="leafsm"><use href="#leafsm"/></svg><h3>Sandwiches</h3></div>
+      <div>
+        <article class="item"><div class="head"><span class="name">Crispy Chicken</span><span class="price">$14</span></div>
+          <p class="desc">Nuestro famoso signature de pollo crujiente, queso suizo, mesclun orgánico de nuestra huerta Hippie Greens y tomate, con salsa honey mustard.</p></article>
+        <article class="item"><div class="head"><span class="name">Black Angus Philly Steak</span><span class="price">$18</span></div>
+          <p class="desc">Black Angus shaved steak, cebolla caramelizada, pimentón, queso suizo, pan rústico.</p></article>
+        <article class="item"><div class="head"><span class="name">Hamburguesa Prime Clásica</span><span class="price">$18</span></div>
+          <p class="desc">Black Angus USDA Prime 8oz, tomate, mesclun orgánico, queso cheddar, bacon. Extra: aguacate, hongos, queso o cebolla caramelizada $2 c/u.</p></article>
+        <article class="item"><div class="head"><span class="name">Pollo Pesto</span><span class="price">$15</span></div>
+          <p class="desc">Pollo a la plancha, tomate, mozzarella fresca y salsa pesto hecha en casa.</p></article>
+        <article class="item"><div class="head"><span class="name">Turkey Avocado</span><span class="price">$18</span></div>
+          <p class="desc">Pan rústico, pavo horneado, aioli de la casa, queso cheddar, aguacate, tomates secos y balsámico de la casa.</p></article>
+        <article class="item"><div class="head"><span class="name">Derretido Tres Quesos</span><span class="price">$12</span></div>
+          <p class="desc">Pan de molde brioche artesanal, quesos havarti, cheddar y mozzarella, con cremita de tomate para dipear.</p></article>
+        <article class="item"><div class="head"><span class="name">Club Sandwich</span><span class="price">$18</span></div>
+          <p class="desc">Pechuga de pavo hecha en casa, jamón, bacon, mesclun orgánico, tomate, queso cheddar y salsa rosada.</p></article>
+        <article class="item"><div class="head"><span class="name">Montecristo</span><span class="price">$15</span></div>
+          <p class="desc">Pan brioche artesanal con jamón, queso suizo, queso cheddar y mantequilla, rebozado en panko crujiente. Con sirope y mermelada.</p></article>
+        <article class="item"><div class="head"><span class="name">Ave Palta</span><span class="price">$12</span></div>
+          <p class="desc">Pan brioche artesanal relleno de cremosa mezcla de aguacate hass con pollo desmenuzado.</p></article>
+      </div>
+    </div>
+
+    <div class="sub reveal"><div class="sub-head"><svg class="leafsm"><use href="#leafsm"/></svg><h3>Ensaladas</h3></div>
+      <div>
+        <article class="item"><div class="head"><span class="name">Edamame Hummus</span><span class="price">$15</span></div>
+          <p class="desc">Nuestro hummus de edamame hecho en casa, rodeado de una mezcla orgánica de hojas frescas, queso feta, aguacate, almendras tostadas, tomatitos cherry, zanahoria y cebolla. Vinagreta de limón y tostadas de pan pita.</p></article>
+        <article class="item"><div class="head"><span class="name">Cranberry Apple Waldorf</span><span class="price">$12</span></div>
+          <p class="desc">Dados de pollo, cranberries secos, manzana verde crujiente y nueces, con un toque de mayonesa suave.</p></article>
+        <article class="item"><div class="head"><span class="name">Pear &amp; Pecan</span><span class="price">$14</span></div>
+          <p class="desc">Mesclun orgánico con lascas de pera y queso manchego, pecanas caramelizadas y vinagreta dulce de balsámico.</p></article>
+        <article class="item"><div class="head"><span class="name">Cranberry Feta</span><span class="price">$13</span></div>
+          <p class="desc">Mesclun y jícama de la huerta, cebolla, zanahoria, queso feta y cranberries secos, con vinagreta de vino tinto.</p></article>
+      </div>
+    </div>
+
+    <div class="sub reveal"><div class="sub-head"><svg class="leafsm"><use href="#leafsm"/></svg><h3>Sopa y Crema</h3></div>
+      <div>
+        <article class="item"><div class="head"><span class="name">Crema del Día</span><span class="price">$12</span></div><p class="desc">Receta distinta cada semana.</p></article>
+        <article class="item"><div class="head"><span class="name">Sopa del Día</span><span class="price">$8</span></div><p class="desc">Receta distinta cada semana.</p></article>
+      </div>
+    </div>
+
+    <div class="sub reveal"><div class="sub-head"><svg class="leafsm"><use href="#leafsm"/></svg><h3>Acompañamientos</h3></div>
+      <div>
+        <article class="item"><div class="head"><span class="name">Puerritos</span><span class="price">$4.5</span></div><p class="desc">Nuestros famosos y crocantes puerros tempurizados con ingrediente secreto. Simplemente deliciosos.</p></article>
+        <article class="item"><div class="head"><span class="name">Ensalada Orgánica</span><span class="price">$4.5</span></div><p class="desc">Con vinagre balsámico reducido.</p></article>
+        <article class="item"><div class="head"><span class="name">Papas Fritas</span><span class="price">$4</span></div></article>
+      </div>
+    </div>
+
+    <div class="sub reveal"><div class="sub-head"><svg class="leafsm"><use href="#leafsm"/></svg><h3>Extras</h3></div>
+      <div class="cols">
+        <div class="plist">
+          <article class="item"><div class="head"><span class="name">2 Huevos</span><span class="price">$5</span></div></article>
+          <article class="item"><div class="head"><span class="name">2 Molde Masa Madre</span><span class="price">$4</span></div></article>
+          <article class="item"><div class="head"><span class="name">2 Molde Brioche</span><span class="price">$5</span></div></article>
+          <article class="item"><div class="head"><span class="name">2 Molde Gluten Free</span><span class="price">$6</span></div></article>
+          <article class="item"><div class="head"><span class="name">Tostaditas</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">Hojaldre</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">Jamón Ahumado</span><span class="price">$6</span></div></article>
+          <article class="item"><div class="head"><span class="name">Pavo al Horno</span><span class="price">$6</span></div></article>
+          <article class="item"><div class="head"><span class="name">Carne Angus</span><span class="price">$7</span></div></article>
+          <article class="item"><div class="head"><span class="name">Salmón Ahumado</span><span class="price">$6</span></div></article>
+          <article class="item"><div class="head"><span class="name">Pechuga de Pollo</span><span class="price">$5</span></div></article>
+          <article class="item"><div class="head"><span class="name">Tocino</span><span class="price">$4</span></div></article>
+        </div>
+        <div class="plist">
+          <article class="item"><div class="head"><span class="name">2 Queso Havarti</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">2 Queso Cheddar</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">2 Queso Mozzarella</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">2 Queso Suizo</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">Mozzarella Fresco</span><span class="price">$5</span></div></article>
+          <article class="item"><div class="head"><span class="name">Mezclum</span><span class="price">$5</span></div></article>
+          <article class="item"><div class="head"><span class="name">Hongos Cremini</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">Hongos Portobello</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">Cebolla Caramelizada</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">Papas Fritas</span><span class="price">$4</span></div></article>
+          <article class="item"><div class="head"><span class="name">Papas Wedges</span><span class="price">$4</span></div></article>
+          <article class="item"><div class="head"><span class="name">Vegetales</span><span class="price">$3</span></div></article>
+          <article class="item"><div class="head"><span class="name">Salsas de la Casa</span><span class="price">$2</span></div></article>
+          <article class="item"><div class="head"><span class="name">Aderezos de la Casa</span><span class="price">$2</span></div></article>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub reveal"><div class="sub-head"><svg class="leafsm"><use href="#leafsm"/></svg><h3>Postres</h3></div>
+      <div>
+        <article class="item"><div class="head"><span class="name">Apple Pie</span><span class="price">$7.5</span></div>
+          <p class="desc">Suave relleno de manzanas naturales cocidas con canela y azúcar morena, dentro de una delicada masa mantequillosa. Cada mordisco se derrite en la boca. Se sirve caliente con helado de vainilla.</p></article>
+        <article class="item"><div class="head"><span class="name">Pecan Pie</span><span class="price">$8</span></div>
+          <p class="desc">Clásico pie americano con relleno de caramelo y crujientes nueces pecanas sobre base doradita. Servido con una bola de helado de vainilla.</p></article>
+        <article class="item"><div class="head"><span class="name">Alfajores Peruanos</span><span class="price">$5</span></div>
+          <p class="desc">Mantequillosos, delicados y caseros, rellenos con una generosa capa de manjar. Se deshacen al primer bocado. Bandejita de 6 — ideales para compartir… o no.</p></article>
+        <article class="item"><div class="head"><span class="name">Limón Pie</span><span class="price">$7</span></div>
+          <p class="desc">Base crocante de galleta, relleno cremoso y ácido de leche condensada y limón, coronado con merengue.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- COFFEE -->
+  <section class="sec" id="coffee">
+    <div class="sec-head reveal">
+      <svg class="botanical" viewBox="0 0 100 100" aria-hidden="true">
+        <path pathLength="1" d="M22 92 C40 76 54 54 62 24"/>
+        <path pathLength="1" d="M44 66 C32 62 26 51 27 40 C40 43 47 53 46 64"/>
+        <path pathLength="1" d="M56 48 C68 45 75 36 76 25 C65 27 58 36 57 47"/>
+        <path pathLength="1" d="M58 34 C49 31 44 24 44 16 C53 17 58 24 59 33"/>
+        <path pathLength="1" d="M60 27 L58 24"/><path pathLength="1" d="M73 34 L67 29"/><path pathLength="1" d="M67 17 L64 14"/>
+        <circle pathLength="1" cx="60" cy="20" r="7"/>
+        <circle pathLength="1" cx="73" cy="28" r="6"/>
+        <circle pathLength="1" cx="67" cy="12" r="5"/>
+      </svg>
+      <h2>Café</h2>
+    </div>
+
+    <div class="sub reveal"><div class="sub-head"><svg class="leafsm"><use href="#leafsm"/></svg><h3>Bebidas Calientes</h3></div>
+      <div>
+        <article class="item"><div class="head"><span class="name">Espresso</span><span class="price">$3</span></div><p class="desc">Mezcla de la casa. Cuerpo cremoso y dulce con notas a chocolate, nueces y algo de funkiness.</p></article>
+        <article class="item"><div class="head"><span class="name">Americano</span><span class="price">$3</span></div><p class="desc">Shot de espresso con agua. Ratio 1:3.</p></article>
+        <article class="item"><div class="head"><span class="name">Macchiato</span><span class="price">$3.5</span></div><p class="desc">Shot de espresso con un toque de leche cremosa. Ratio 1:1.</p></article>
+        <article class="item"><div class="head"><span class="name">Cappuccino</span><span class="price">$4</span></div><p class="desc">Shot de espresso y leche cremosa. Ratio 1:2.</p></article>
+        <article class="item"><div class="head"><span class="name">Latte</span><span class="price">$4.25</span></div><p class="desc">Shot de espresso y leche texturizada. Ratio 1:3.</p></article>
+        <article class="item"><div class="head"><span class="name">Pistacho Caliente</span><span class="price">$5.5</span></div><p class="desc">Crema de pistacho natural derretida con leche.</p></article>
+        <article class="item"><div class="head"><span class="name">Matcha Ceremonial</span><span class="price">$4.5</span></div><p class="desc">Matcha preparada en agua de manera tradicional.</p></article>
+        <article class="item"><div class="head"><span class="name">Matcha Latte</span><span class="price">$5</span></div><p class="desc">Matcha verde ceremonial + leche texturizada.</p></article>
+        <article class="item"><div class="head"><span class="name">Pistacho Matcha</span><span class="price">$8</span></div><p class="desc">Crema de pistacho + matcha ceremonial.</p></article>
+        <article class="item"><div class="head"><span class="name">Flavored Latte</span><span class="price">$5.5</span></div><p class="desc">Vainilla, mocha, dulce de leche, salted caramel o white chocolate.</p></article>
+        <article class="item"><div class="head"><span class="name">Pistachino</span><span class="price">$8</span></div><p class="desc">Cappuccino con crema de pistacho y pistacho molido.</p></article>
+        <article class="item"><div class="head"><span class="name">Chocolate Caliente</span><span class="price">$7.5</span></div><p class="desc">Chocolate artesanal panameño derretido.</p></article>
+      </div>
+      <p class="veg-note">Leches vegetales: avena · soya · almendra · coco — +$0.75</p>
+    </div>
+
+    <div class="sub reveal"><div class="sub-head"><svg class="leafsm"><use href="#leafsm"/></svg><h3>Cafés de Origen</h3></div>
+      <div class="origin">
+        <article class="item"><div class="head"><span class="name">Geisha Natural Anaeróbico</span><span class="price">$9</span></div>
+          <div class="meta"><span><b>Cultivar</b> Green Tip Geisha</span><span><b>Proceso</b> Natural fermentado*</span><span><b>Tueste</b> Claro</span><span><b>Finca</b> Cafelino</span><span><b>Elevación</b> 1500 m</span><span><b>Lugar</b> Boquete, Panamá</span></div>
+          <p class="cup">Notas a lima, rosas y mango. Acidez compleja, cuerpo sedoso y un retrogusto floral que perdura.</p></article>
+        <article class="item"><div class="head"><span class="name">Catuai Lavado</span><span class="price">$5</span></div>
+          <div class="meta"><span><b>Cultivar</b> Catuai</span><span><b>Proceso</b> Lavado</span><span><b>Tueste</b> Claro-Medio</span><span><b>Finca</b> Cafelino</span><span><b>Elevación</b> 1350–1400 m</span><span><b>Lugar</b> Boquete, Panamá</span></div>
+          <p class="cup">Balanceada, con notas a vainilla y caramelo. Acidez media y jugosa.</p></article>
+        <article class="item"><div class="head"><span class="name">Catuai Amarillo Natural Anaeróbico</span><span class="price">$6</span></div>
+          <div class="meta"><span><b>Cultivar</b> Catuai amarillo</span><span><b>Proceso</b> Natural fermentado*</span><span><b>Tueste</b> Claro</span><span><b>Finca</b> Cafelino</span><span><b>Elevación</b> 1400 m</span><span><b>Lugar</b> Boquete, Panamá</span></div>
+          <p class="cup">Notas a mandarina, avellana y caramelo. Acidez dulce, cuerpo redondo y retrogusto frutal.</p></article>
+      </div>
+      <p class="aside">El café de origen proviene de una sola finca o región, lo que le da un perfil único: su carácter refleja el clima, la altitud y el suelo donde creció.</p>
+      <p class="footnote">* Corta fermentación con microorganismos nativos.</p>
+    </div>
+  </section>
+
+  <!-- COLD DRINKS -->
+  <section class="sec" id="drinks">
+    <div class="sec-head reveal">
+      <svg class="botanical" viewBox="0 0 100 100" aria-hidden="true">
+        <path pathLength="1" d="M50 92 C48 70 50 50 58 24"/>
+        <path pathLength="1" d="M46 64 C36 60 31 51 32 41 C43 44 48 53 47 62"/>
+        <path pathLength="1" d="M58 46 C68 43 74 35 75 25 C65 27 59 35 58 45"/>
+        <path pathLength="1" d="M56 26 L55 22"/><path pathLength="1" d="M62 21 L60 17"/><path pathLength="1" d="M66 28 L63 24"/>
+        <circle pathLength="1" cx="55" cy="20" r="4"/>
+        <circle pathLength="1" cx="63" cy="16" r="4"/>
+        <circle pathLength="1" cx="68" cy="25" r="4"/>
+      </svg>
+      <h2>Bebidas Frías</h2>
+    </div>
+    <div class="reveal">
+      <article class="item"><div class="head"><span class="name">Iced Coffee</span><span class="price">$5</span></div><p class="desc">Dos shots de espresso + hielo.</p></article>
+      <article class="item"><div class="head"><span class="name">Iced Latte</span><span class="price">$5.5</span></div><p class="desc">Dos shots de espresso + leche + hielo.</p></article>
+      <article class="item"><div class="head"><span class="name">Cold Brew</span><span class="price">$5.5</span></div><p class="desc">Café extraído en frío por 18 horas.</p></article>
+      <article class="item"><div class="head"><span class="name">Té Frío</span><span class="price">$4</span></div><p class="desc">Hecho en casa con té negro 100% natural.</p></article>
+      <article class="item"><div class="head"><span class="name">Frappes</span><span class="price">$5.5</span></div><p class="desc">White chocolate, chocolate, dulce de leche, cookies and cream, vainilla o salted caramel.</p></article>
+      <article class="item"><div class="head"><span class="name">Frosties Naturales</span><span class="price">$6</span></div><p class="desc">Uva, fresas, blueberries, frambuesa, mixed berries, piña o maracuyá.</p></article>
+      <article class="item"><div class="head"><span class="name">Yogurt Smoothies</span><span class="price">$7</span></div><p class="desc">Frutas naturales + yogurt. Uva, fresa, blueberries, mora, frambuesa, mixed berries, piña, maracuyá, kiwi, mango o banano.</p></article>
+      <article class="item"><div class="head"><span class="name">Sodas · Agua con Gas</span><span class="price">$3</span></div></article>
+    </div>
+    <p class="veg-note">Leches vegetales: avena · soya · almendra · coco — +$0.75</p>
+  </section>
+
+  <!-- SPECIALS -->
+  <section class="sec" id="specials">
+    <div class="sec-head reveal">
+      <svg class="botanical" viewBox="0 0 100 100" aria-hidden="true">
+        <path pathLength="1" d="M50 92 V20"/>
+        <path pathLength="1" d="M50 70 C39 68 31 60 28 49 C40 50 48 58 50 68"/>
+        <path pathLength="1" d="M50 60 C61 58 69 50 72 39 C60 40 52 48 50 58"/>
+        <path pathLength="1" d="M50 52 C41 50 34 43 32 33 C42 34 49 41 50 50"/>
+        <path pathLength="1" d="M50 44 C59 42 66 35 68 26 C58 27 51 34 50 42"/>
+        <path pathLength="1" d="M50 36 C45 31 43 25 43 18 C49 21 51 27 50 34"/>
+      </svg>
+      <h2>Specials</h2>
+    </div>
+
+    <div class="special reveal">
+      <h3>Mix &amp; Match <span class="p">$18</span></h3>
+      <p class="s-sub">Elige tu media porción de sándwich, ensalada, sopa o crema del día.</p>
+      <div class="choices">
+        <div class="choice"><h4>Tu Sándwich</h4><ul><li>Crispy Chicken</li><li>Black Angus Philly Steak</li><li>Pollo Pesto</li><li>Turkey Avocado</li></ul></div>
+        <div class="choice"><h4>Tu Ensalada</h4><ul><li>Pear &amp; Pecans</li><li>Cranberry Feta</li><li>Hummus de Edamame</li><li>Apple Waldorf</li></ul></div>
+        <div class="choice"><h4>Tu Sopa o Crema</h4><ul><li>Crema de Puerro</li><li>Crema de Hongos</li><li>Crema de Zapallo</li><li>Sopa de Lentejas</li><li>Sancocho de Pollo</li></ul></div>
+      </div>
+      <p class="promo">$15 de lunes a viernes, 12 m. d. a 2 p. m. — incluye café, té o soda.</p>
+    </div>
+
+    <div class="special reveal">
+      <h3>Bowls <span class="p">$12</span></h3>
+      <p class="s-sub">Todos los bowls vienen con pepino chino, cebolla y rabanitos encurtidos, maíz salteado y aguacate.</p>
+      <div class="choices">
+        <div class="choice"><h4>Tu Proteína</h4><ul><li>Fajitas de carne Angus</li><li>Pollo a la plancha o crispy</li><li>Salmón ahumado</li><li>Salmón fresco</li><li>Pavo al horno</li><li>Atún rojo</li></ul></div>
+        <div class="choice"><h4>Tu Salsa</h4><ul><li>Teriyaki</li><li>Mayothai</li><li>Pesto</li><li>Criolla</li></ul></div>
+        <div class="choice"><h4>Tu Base</h4><ul><li>Arroz jazmín</li><li>Mezclum</li><li>Quinoa</li><li>Puré de papas</li></ul></div>
+      </div>
+    </div>
+
+    <div class="special reveal">
+      <h3>Pasta Bowls <span class="p">$12</span></h3>
+      <div class="choices">
+        <div class="choice"><h4>Tu Proteína</h4><ul><li>Fajitas de carne Angus</li><li>Pollo a la plancha o crispy</li><li>Salmón ahumado</li><li>Salmón fresco</li><li>Pavo al horno</li><li>Atún rojo</li></ul></div>
+        <div class="choice"><h4>Tu Salsa</h4><ul><li>Pomodoro</li><li>Pesto</li><li>Oleo</li><li>Blanca</li></ul></div>
+        <div class="choice"><h4>Tu Pasta</h4><ul><li>Fettuccini</li><li>Spaghettini</li><li>Ñoquis</li></ul></div>
+      </div>
+      <p class="promo">$9.99 de lunes a viernes, 12 m. d. a 2 p. m. — incluye café, té o soda.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="reveal">
+  <svg class="botanical" viewBox="0 0 100 100" aria-hidden="true">
+    <path pathLength="1" d="M50 92 V20"/>
+    <path pathLength="1" d="M50 70 C39 68 31 60 28 49 C40 50 48 58 50 68"/>
+    <path pathLength="1" d="M50 60 C61 58 69 50 72 39 C60 40 52 48 50 58"/>
+    <path pathLength="1" d="M50 50 C41 48 34 41 32 31 C42 32 49 39 50 48"/>
+    <path pathLength="1" d="M50 42 C59 40 66 33 68 24 C58 25 51 32 50 40"/>
+  </svg>
+  <div class="fw">Té Café</div>
+  <div class="fs">Panamá · @tecafepty</div>
+</footer>
+
+<!-- shared small leaf -->
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+  <symbol id="leafsm" viewBox="0 0 24 24">
+    <path d="M12 22 V8"/>
+    <path d="M12 15 C8 14 6 11 6 6.5 C10.5 6.5 12 10.5 12 15"/>
+    <path d="M12 12.5 C16 11.5 18 8.5 18 4 C13.5 4 12 8 12 12.5"/>
+  </symbol>
+</svg>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var header = document.querySelector('.top');
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.cats a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+
+  // smooth scroll with sticky offset
+  links.forEach(function(a){
+    a.addEventListener('click', function(e){
+      var target = document.querySelector(a.getAttribute('href'));
+      if(!target) return;
+      e.preventDefault();
+      var y = target.getBoundingClientRect().top + window.pageYOffset - header.offsetHeight - 6;
+      window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
+
+  // scroll-spy: highlight active category
+  if('IntersectionObserver' in window){
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var i = sections.indexOf(en.target);
+        if(i < 0) return;
+        if(en.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          links[i].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -65% 0px', threshold: 0 });
+    sections.forEach(function(s){ if(s) spy.observe(s); });
+
+    // reveal on enter
+    var rev = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('in'); rev.unobserve(en.target); }
+      });
+    }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ rev.observe(el); });
+
+    // draw botanical illustrations on enter
+    var draw = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('drawn'); draw.unobserve(en.target); }
+      });
+    }, { threshold: .35 });
+    document.querySelectorAll('.botanical').forEach(function(el){ draw.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    document.querySelectorAll('.botanical').forEach(function(el){ el.classList.add('drawn'); });
+  }
+
+  // cover draws immediately on load
+  window.addEventListener('load', function(){
+    var cover = document.querySelector('.cover .botanical');
+    if(cover) cover.classList.add('drawn');
+    var c = document.querySelector('.cover');
+    if(c) c.classList.add('in');
+  });
+})();
+</script>
+</body>
+</html>
