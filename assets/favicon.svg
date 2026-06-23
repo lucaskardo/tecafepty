@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="15" fill="#283328"/>
+  <text x="31" y="45" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="500" fill="#F6F1E5">T&#233;</text>
+  <g fill="none" stroke="#A8CC6A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M47 27 V18"/>
+    <path d="M47 23 C43 22 41 20 41 16.5 C45 16.5 47 19.5 47 23"/>
+    <path d="M47 21 C51 20 53 17.5 53 14 C49 14 47 17.5 47 21"/>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "name": "Té Café",
+  "short_name": "Té Café",
+  "description": "Café de especialidad y brunch en Marbella, Panamá. De nuestra huerta a tu mesa.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F6F1E5",
+  "theme_color": "#283328",
+  "icons": [
+    { "src": "/assets/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/assets/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/assets/icon-512.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "/assets/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}
